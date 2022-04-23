@@ -21,7 +21,7 @@ def wilson(X, xl, k):
     return ind
 
 def mnn(X, xl, m):
-  V = np.zeros((m,X.shape[0]))
+  V = np.zeros((m,X.shape[0]), np.int32)
   # Calculamos la matiz de distancias
   # donde la diagonal representa la distancia de 
   # cada muestra consigo mismo (la cual debe ser infinita)
@@ -29,14 +29,14 @@ def mnn(X, xl, m):
   #np.fill_diagonal(I, float('inf'))
   #D = L2dist(X, X) + I
   for n in range(X.shape[0]):
-    YY = np.sum(np.square(X),axis=1);
+    XX = np.sum(np.square(X),axis=1);
     xn = X[n,:];
-    XX = np.square(xn);
+    XXn = np.sum(np.square(xn));
     # XX and YY were converted into row vectors at sum
     # So XX needs to be a column vector and YY is fine as row vector
-    D  = XX[:,None] + (YY - 2*xn@np.transpose(X))
+    D  = XXn + (XX - 2*xn@np.transpose(X))
     idx = np.argsort(D,axis=0)
-    V[:,n] = idx[0,:m] # HACK creo que n y : van al revés
+    V[:,n] = idx[1:m+1] # HACK creo que n y : van al revés
   # Ordenamos de mas cercano a mas lejano cada columna
   # Guardamos en V los primer m vecinos mas cercanos
   # por columnas para cada muestra

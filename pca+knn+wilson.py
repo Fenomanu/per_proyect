@@ -41,9 +41,7 @@ print("Error de Wilson sin PCA: " + str(err))
 """
 
 # PCA
-print(X.shape)
 m,W = pca(X)
-print(W.shape)
 
 # PCA -> Wilson
 # Archivo de salida
