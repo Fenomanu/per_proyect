@@ -8,16 +8,22 @@ from knn import knn
 def wilson(X, xl, k):
     ind = np.array(range(X.shape[0]))
     err = 1
-    while (err > 0):
+    while (err):
         print(ind.shape)
-        err = 0
+        err = False
         V = mnn(X, xl, 100)
+        if len(V) == 0: 
+          print("Tremendo error")
+          sys.exit()
+
         for i in ind: # HACK Probar a hacer el recorrido sobre ind, que tiene más sentido
-            i -= err
-            c = knnV(V[:,i], ind, xl,k)
+            dif =  np.setdiff1d(ind, [i])
+            #print(str(len(ind)) + " != " + str(len(dif)))
+            c = knnV(V[:,i], dif, xl,k)
             if (xl[i] != c): # HACK Cuidado, que no estamos eliminando elementos de xl
-                err += 1
-                ind = np.setdiff1d(ind, [i])
+              #print(str(xl[i]) + " != " + str(c))
+              err = True
+              ind = dif
     return ind
 
 def mnn(X, xl, m):
@@ -25,9 +31,6 @@ def mnn(X, xl, m):
   # Calculamos la matiz de distancias
   # donde la diagonal representa la distancia de 
   # cada muestra consigo mismo (la cual debe ser infinita)
-  #I = np.identity(X.shape[0])
-  #np.fill_diagonal(I, float('inf'))
-  #D = L2dist(X, X) + I
   for n in range(X.shape[0]):
     XX = np.sum(np.square(X),axis=1);
     xn = X[n,:];
@@ -36,7 +39,8 @@ def mnn(X, xl, m):
     # So XX needs to be a column vector and YY is fine as row vector
     D  = XXn + (XX - 2*xn@np.transpose(X))
     idx = np.argsort(D,axis=0)
-    V[:,n] = idx[1:m+1] # HACK creo que n y : van al revés
+    #idx = np.setdiff1d(ind, [i])
+    V[:,n] = idx[1:m+1]
   # Ordenamos de mas cercano a mas lejano cada columna
   # Guardamos en V los primer m vecinos mas cercanos
   # por columnas para cada muestra
@@ -46,12 +50,14 @@ def knnV(Vi, ind, xl,k):
   # Filtramos en idx los indices de Vi
   # que aun no han sido eliminados
   idx = Vi[np.isin(Vi,ind)]
-  print(Vi)
+  #print(Vi)
   # Escogemos los k primeros
   idx = idx[:k]
   # Realizamos la clasificacion 
   # y asignmamos a c
   classif,_ = stats.mode(xl[idx])
-  print(classif)
-  c = xl[int(classif[0])]
+  #print(idx)
+  #print("c ->")
+  #print(classif)
+  c = classif[0]
   return c

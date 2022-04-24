@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-#./pract01/pca+knn+wilson.py ./MNIST/train-images-idx3-ubyte.npz ./MNIST/train-labels-idx1-ubyte.npz  ./MNIST/t10k-images-idx3-ubyte.npz ./MNIST/t10k-labels-idx1-ubyte.npz "1 2 5 10 20 50 100 200"
+#./pract01/pca+knn+wilson.py ./MNIST/train-images-idx3-ubyte.npz ./MNIST/train-labels-idx1-ubyte.npz "1 2 5 10 20 50 100 200"
 
 import sys
 import math
@@ -9,23 +9,26 @@ from knn import knn
 from wilson import wilson
 
 if len(sys.argv)!=6:
-  print('Usage: %s <trdata> <trlabels> <tedata> <telabels> <ks>' % sys.argv[0]);
+  print('Usage: %s <trdata> <trlabels>  <ks> <%%trper> <%%dvper>' % sys.argv[0]);
   sys.exit(1);
 
 X= np.load(sys.argv[1])['X'];
 xl=np.load(sys.argv[2])['xl'];
-Y= np.load(sys.argv[3])['Y'];
-yl=np.load(sys.argv[4])['yl'];
-ks=np.fromstring(sys.argv[5],dtype=int,sep=' ');
+trper=int(sys.argv[4]);
+dvper=int(sys.argv[5]);
+ks=np.fromstring(sys.argv[3],dtype=int,sep=' ');
 
-# Reduccion de muestras
 N=X.shape[0];
 np.random.seed(23); perm=np.random.permutation(N);
 X=X[perm]; xl=xl[perm];
 
 # Selecting a subset for train and dev sets
-# Ntr=round(20/100*N);
-# X=X[:Ntr]; xl=xl[:Ntr];
+Ntr=round(trper/100*N);
+Xtr=X[:Ntr]; xltr=xl[:Ntr];
+Ndv=round(dvper/100*N);
+Xdv=X[N-Ndv:]; xldv=xl[N-Ndv:];
+
+X,Y,xl,yl = Xtr,Xdv,xltr,xldv
 
 """
 # Wilson

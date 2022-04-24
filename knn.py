@@ -14,6 +14,8 @@ def knn(X,xl,Y,yl,k):
 
   # D is a distance matrix where training samples are by rows 
   # and test sample by columns
+  print(X.shape)
+  print(Y.shape)
   D = L2dist(X,Y);
 
   # Sorting descend per column from closest to farthest
