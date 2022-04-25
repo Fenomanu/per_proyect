@@ -33,19 +33,3 @@ def knn(X,xl,Y,yl,k):
   err = np.mean(yl!=classification)*100;
 
   return err;
-
-def wilsonKnn(xn,xnl,X,xl, k):
-  # D is a distance matrix where training samples are by rows 
-  # and test sample by columns
-  D=np.zeros((X.shape[0],xn.shape[0]));
-  for i in range(X.shape[0]):
-    D[i] = np.square(X[i]-xn);
-
-  # Sorting descend per column from closest to farthest
-  idx = np.argsort(D,axis=0);
-
-  # indexes of 1 nearest neighbor of each test sample
-  idx = idx[:k,:];
-
-  # Returns the class of the k nearest neighbors
-  return xl[idx[0]];
