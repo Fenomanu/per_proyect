@@ -38,12 +38,11 @@ def mnn(X, xl, m):
     # XX and YY were converted into row vectors at sum
     # So XX needs to be a column vector and YY is fine as row vector
     D  = XXn + (XX - 2*xn@np.transpose(X))
+    # Ordenamos de mas cercano a mas lejano cada columna
+    # Guardamos en V los primer m vecinos mas cercanos
+    # por columnas para cada muestra
     idx = np.argsort(D,axis=0)
-    #idx = np.setdiff1d(ind, [i])
     V[:,n] = idx[1:m+1]
-  # Ordenamos de mas cercano a mas lejano cada columna
-  # Guardamos en V los primer m vecinos mas cercanos
-  # por columnas para cada muestra
   return V
 
 def knnV(Vi, ind, xl,k):

@@ -2,7 +2,7 @@ import pca as p
 import numpy as np
 import matplotlib.pyplot as plt
 
-X = np.load("./MNIST/train-images-idx3-ubyte.npz")['X']
+X = np.load("./data/train-images-idx3-ubyte.npz")['X']
 m,W = p.pca(X)
 print(np.shape(W))
 
