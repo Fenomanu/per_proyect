@@ -67,6 +67,7 @@ for k in ks:
   # y obtención de la tasa de error 
   err = knn(Xkw, xlkw, Yk, yl, 1)
 
+  print(str(k) + ": " + str(err))
   # Escritura en .out del resultado
   file.write(str(k)); file.write(' ')
   file.write(str(err)); file.write('\n')

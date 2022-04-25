@@ -27,10 +27,10 @@ Ndv=round(dvper/100*N);
 Xdv=X[N-Ndv:]; xldv=xl[N-Ndv:];
 
 # Cálculo de PCA
-m,W = pca(X)
+m,W = pca(Xtr)
 
 # Archivo de salida
-file = open("pca+knn-exp.out", "w")
+file = open("pca+knn-exp-2.out", "w")
 
 for k in ks:
   # Proyección a k dimensiones
