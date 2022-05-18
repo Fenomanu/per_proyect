@@ -11,6 +11,7 @@ def gaussian(Xtr,xltr,Xdv,xldv,alphas): # Alphas son los valores para el suaviza
     # Calculo de parametros
     pc = np.zeros(C) # Vector de probabilidades a priori de c
     mu = np.zeros((C, D)) # Matriz de mus
+    edv = np.zeros(N)
     sigma = np.zeros((C, D, D)) # Matriz tridimensional (vector de matrices) con las matrices de covarianza por clases
     # print(N)
     for ind, etq in enumerate(etqs):
@@ -23,15 +24,14 @@ def gaussian(Xtr,xltr,Xdv,xldv,alphas): # Alphas son los valores para el suaviza
         op = Xc - mu[ind]
         sigma[ind] = (np.transpose(op) @ op)/Nc
     
-    sigma = np.where(sigma==0, sys.float_info.min, sigma)[0]
 
     # Suavizado de parametros y clasificacion
     for i,a in enumerate(alphas):
         sigmasuave = a * sigma + (1 - a) * np.identity(D)
-        G = np.zeros(C)
+        G = np.zeros((C,N))
         for c in range(C):
             G[c] = pxc(pc[c], mu[c], sigma[c], Xtr)
-        indexes = np.argmax(G, axis=1)
+        indexes = np.argmax(G, axis=0)
         clasif = etqs[indexes]
         edv[i] = np.mean(xldv!=clasif)*100;
     return edv; # Error de clasificacion del conjunto de validacion
@@ -41,12 +41,16 @@ def pxc(pcc, muc, sigmac, X): # Probabilidades de los datos (X) de pertenecer a 
     pinv = np.linalg.pinv(sigmac)
     Wc = -pinv/2
     wc = - muc @ pinv
-    wc0 = np.log(pcc) - logdet(sigmac)/2 - np.transpose(muc) @ pinv @ muc
-    pxdc = np.transpose(Xtr) @ Wc @ Xtr + np.transpose(wc) @ Xtr + wc0
+    wc0 = np.log(pcc) - logdet(sigmac)/2 - np.transpose(muc)/2 @ pinv @ muc
+    p1 = np.sum(np.multiply(X @ Wc, X), axis=1)
+    pxdc = p1 + X @ wc + wc0
     return pxdc;
 
 def logdet(X): # Para calcular el determinante de la matriz de covarianzas
     # Calculo del logaritmo del determinante (suma de logaritmos de valores propios)
     # Quizas aqui hay que hacer el where==0
-    w,v = np.eig(X)# w = valores, v = vectores
+    w,v = np.linalg.eig(X)# w = valores, v = vectores
+
+    if np.any(w <= 0):
+        return np.log(sys.float_info.min)
     return np.sum(np.log(w))
