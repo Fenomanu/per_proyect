@@ -40,6 +40,6 @@ for i,e in enumerate(alphas):
 
   # Escritura en .out del resultado
   file.write(str(e)); file.write(' ')
-  file.write(str(err[i][0])); file.write('\n')
+  file.write(str(err[i])); file.write('\n')
 
 file.close()
