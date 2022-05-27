@@ -26,24 +26,31 @@ def gaussian(Xtr,xltr,Xdv,xldv,alphas): # Alphas son los valores para el suaviza
 
     # Suavizado de parametros y clasificacion
     for i,a in enumerate(alphas):
+        print(sigma)
         sigmasuave = a * sigma + (1 - a) * np.identity(D)
+        print(sigmasuave)
         G = np.zeros((C,N))
         for c in range(C):
             G[c] = pxc(pc[c], mu[c], sigmasuave[c], Xtr)
-            print(G[c]);
         indexes = np.argmax(G, axis=0)
-        clasif = etqs[indexes]
+        clasif = xldv[indexes]
         edv[i] = np.mean(xldv!=clasif)*100;
     return edv; # Error de clasificacion del conjunto de validacion
 
 
 def pxc(pcc, muc, sigmac, X): # Probabilidades de los datos (X) de pertenecer a la clase c
+    #print(sigmac)
     pinv = np.linalg.pinv(sigmac)
-    Wc = -pinv/2
-    wc = muc @ pinv
-    wc0 = np.log(pcc) - logdet(sigmac)/2 - (muc @ pinv) @ np.transpose(muc) * 0.5
+    Wc = - 0.5 * np.transpose(pinv)
+    wc = np.transpose(pinv) @ np.transpose(muc)
+    wc01 = np.log(pcc)
+    wc02 = 0.5 * logdet(sigmac)
+    wc03 = 0.5 * (muc @ np.transpose(pinv)) @ np.transpose(muc)
+    #print(str(wc01) + " - " + str(wc02) + " - " + str(wc03))
+    wc0 = wc01 - wc02 - wc03
+    #print(wc0)
     p1 = np.sum(np.multiply(X @ Wc, X), axis=1)
-    pxdc = p1 + X @ np.transpose(wc) + wc0
+    pxdc = p1 + (wc @ np.transpose(X)) + wc0
     return pxdc;
 
 def logdet(X): # Para calcular el determinante de la matriz de covarianzas
@@ -53,4 +60,6 @@ def logdet(X): # Para calcular el determinante de la matriz de covarianzas
     w = w.real
     if np.any(w <= 0):
         return np.log(sys.float_info.min)
-    return np.sum(np.log(w))
+    suma = np.sum(np.log(w))
+    print(suma)
+    return suma

@@ -27,7 +27,7 @@ Xdv=X[N-Ndv:]; xldv=xl[N-Ndv:];
 
 
 # Archivo de salida
-file = open("multinomial-exp.out", "w")
+file = open("gaussian-exp.out", "w")
 err = gaussian(Xtr, xltr, Xdv, xldv, alphas)
 for i,e in enumerate(alphas):
   # Proyección a k dimensiones
