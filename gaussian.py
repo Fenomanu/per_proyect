@@ -6,6 +6,7 @@ def gaussian(Xtr,xltr,Xdv,xldv,alphas): # Alphas son los valores para el suaviza
     # Estimacion parametros por clase
     etqs = np.unique(xltr)
     N = Xtr.shape[0]
+    Nm = Xdv.shape[0]
     D = Xtr.shape[1]
     C = len(etqs)
     # Calculo de parametros
@@ -26,14 +27,12 @@ def gaussian(Xtr,xltr,Xdv,xldv,alphas): # Alphas son los valores para el suaviza
 
     # Suavizado de parametros y clasificacion
     for i,a in enumerate(alphas):
-        print(sigma)
         sigmasuave = a * sigma + (1 - a) * np.identity(D)
-        print(sigmasuave)
-        G = np.zeros((C,N))
+        G = np.zeros((C,Nm))
         for c in range(C):
-            G[c] = pxc(pc[c], mu[c], sigmasuave[c], Xtr)
+            G[c] = pxc(pc[c], mu[c], sigmasuave[c], Xdv)
         indexes = np.argmax(G, axis=0)
-        clasif = xldv[indexes]
+        clasif = etqs[indexes]
         edv[i] = np.mean(xldv!=clasif)*100;
     return edv; # Error de clasificacion del conjunto de validacion
 
@@ -41,16 +40,16 @@ def gaussian(Xtr,xltr,Xdv,xldv,alphas): # Alphas son los valores para el suaviza
 def pxc(pcc, muc, sigmac, X): # Probabilidades de los datos (X) de pertenecer a la clase c
     #print(sigmac)
     pinv = np.linalg.pinv(sigmac)
-    Wc = - 0.5 * np.transpose(pinv)
-    wc = np.transpose(pinv) @ np.transpose(muc)
+    Wc = - 0.5 * pinv
+    wc =  muc @ pinv
     wc01 = np.log(pcc)
     wc02 = 0.5 * logdet(sigmac)
-    wc03 = 0.5 * (muc @ np.transpose(pinv)) @ np.transpose(muc)
+    wc03 = 0.5 * (muc @ pinv) @ muc
     #print(str(wc01) + " - " + str(wc02) + " - " + str(wc03))
     wc0 = wc01 - wc02 - wc03
     #print(wc0)
     p1 = np.sum(np.multiply(X @ Wc, X), axis=1)
-    pxdc = p1 + (wc @ np.transpose(X)) + wc0
+    pxdc = p1 + (X @ wc) + wc0
     return pxdc;
 
 def logdet(X): # Para calcular el determinante de la matriz de covarianzas
