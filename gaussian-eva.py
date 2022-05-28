@@ -3,7 +3,7 @@
 import sys
 import math
 import numpy as np
-from multinomial import multinomial
+from gaussian import gaussian
 
 if len(sys.argv)!=6:
   print('Usage: %s <trdata> <trlabels> <tedata> <telabels> <e>' % sys.argv[0]);
@@ -18,8 +18,8 @@ e=float(sys.argv[5]);
 
 
 # Archivo de salida
-file = open("multinomial-eva.out", "w")
-err = multinomial(X, xl, Y, yl, [e])
+file = open("gaussian-eva.out", "w")
+err = gaussian(X, xl, Y, yl, [e])
 file.write(str(e)); file.write(' ')
-file.write(str(err[0][0])); file.write('\n')
+file.write(str(err[0])); file.write('\n')
 file.close()

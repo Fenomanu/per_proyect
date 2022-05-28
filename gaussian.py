@@ -60,5 +60,4 @@ def logdet(X): # Para calcular el determinante de la matriz de covarianzas
     if np.any(w <= 0):
         return np.log(sys.float_info.min)
     suma = np.sum(np.log(w))
-    print(suma)
     return suma
