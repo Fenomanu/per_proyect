@@ -17,8 +17,8 @@ set terminal postscript eps font "Helvetica,24"
 # Nombre del fichero de salida
 #
 
-# set terminal jpeg size 1280,960
-set output "pca+gaussian-exp.eps"
+set terminal jpeg size 1280,960
+set output "pca+gaussian-exp-k20.jpeg"
 
 # Establece que los ejes estén en escala logarítmica para observar más
 # fácilmente valores muy cercanos entre si
@@ -29,7 +29,13 @@ set logscale xy
 # Rangos del eje x y del eje y
 #
 
-set xrange [0.8e-9:10e-1]
+# set xrange [0.5:1]
+# set yrange [4:7]
+
+# set xrange [0.5e-9:1.5]
+# set yrange [4:75]
+
+set xrange [0.5e-9:1.5]
 set yrange [4:25]
 
 # Define los puntos de referencia (tics) sobre el eje x y el eje y
@@ -37,8 +43,11 @@ set yrange [4:25]
 # entre comillas dobles y la posición en ese eje donde aparece la
 # etiqueta
 
-set xtics ("1e-9" 1e-9, "1e-8" 1e-8, "1e-7" 1e-7, "1e-6" 1e-6, "1e-5" 1e-5, "1e-4" 1e-4, "1e-3" 1e-3, "1e-2" 1e-2, "1e-1" 1e-1, "9e-1" 9e-1)
-set ytics ("5" 5, "10" 10, "15" 15)
+# set xtics ("0.1" 0.1, "0.2" 0.2, "0.3" 0.3, "0.4" 0.4, "0.5" 0.5, "0.6" 0.6, "0.7" 0.7, "0.8" 0.8, "0.9" 0.9, "0.95" 0.95, "0.99" 0.99)
+# set ytics ("4" 4, "4.25" 4.25, "4.5" 4.5, "4.75" 4.75, "5" 5, "5.25" 5.25, "5.5" 5.5, "5.75" 5.75, "6" 6, "6.25" 6.25, "6.5" 6.5)
+
+set xtics ("1e-9" 1e-9, "1e-8" 1e-8, "1e-7" 1e-7, "1e-6" 1e-6, "1e-5" 1e-5, "1e-4" 1e-4, "1e-3" 1e-3, "1e-2" 1e-2, "1e-1" 0.1, "1" 1)
+set ytics ("5" 5, "10" 10, "15" 15, "20" 20, "25" 25, "30" 30, "35" 35, "40" 40, "45" 45, "50" 50, "55" 55, "60" 60, "65" 65, "70" 70, "75" 75)
 
 # Definimos el texto que usamos para poner etiquetas en la gráfica:
 # - El eje x "Dimensionalidad"
@@ -52,10 +61,17 @@ set ytics ("5" 5, "10" 10, "15" 15)
 # se alinea el texto (right, left, center) e incluso el tipo y tamaño
 # de la fuente: font "HelveticaBold,30"
 
-set label "Alpha" at 5e-1,4.5 right
-set label "Error (%)" at 1e-9,23 left
-# set label "Original" at 0.92,2.9 left
-set label "MNIST PCA+Gaussian" at 1e-3,17 center font "HelveticaBold,30"
+# set label "Alpha" at 0.99,4.05 right
+# set label "Error (%)" at 0.505,6.8 left
+# set label "MNIST PCA+Gaussian" at 0.8,5.25 center font "HelveticaBold,30"
+
+# set label "Alpha" at 0.8,4.2 right
+# set label "Error (%)" at 0.8e-9,65 left
+# set label "MNIST PCA+Gaussian" at 1e-3,20 center font "HelveticaBold,30"
+
+set label "Alpha" at 0.8,4.2 right
+set label "Error (%)" at 0.8e-9,24 left
+set label "MNIST PCA+Gaussian" at 1e-3,12 center font "HelveticaBold,30"
 
 # El comando plot representa las dos curvas que aparecen en la
 # gráfica. La primera curva es la de PCA y la segunda, la Original,
@@ -86,7 +102,7 @@ set label "MNIST PCA+Gaussian" at 1e-3,17 center font "HelveticaBold,30"
 # l) cuyo linewidth es 4 (lw 4) y el tipo de línea es la 2 (lt 2)
 
 set key outside
-plot for [col=2:11] "pca+gaussian-exp.out" u 1:col t columnheader w lp lw 2
+plot for [col=6:11] "pca+gaussian-exp-test.out" u 1:col t columnheader w lp lw 2
 
 # Si quieres saber más sobre los anchos de línea, tipos de
 # línea/punto, etc. ejecuta "gnuplot" desde el interprete de comandos,
