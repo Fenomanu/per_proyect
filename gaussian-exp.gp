@@ -17,8 +17,8 @@ set terminal postscript eps font "Helvetica,24"
 # Nombre del fichero de salida
 #
 
-set terminal jpeg size 1280,960
-set output "multinomial-exp.jpeg"
+# set terminal jpeg size 1280,960
+set output "gaussian-exp.eps"
 
 # Establece que los ejes estén en escala logarítmica para observar más
 # fácilmente valores muy cercanos entre si
@@ -29,16 +29,16 @@ set logscale xy
 # Rangos del eje x y del eje y
 #
 
-set xrange [0.8e-10:1.2e-1]
-set yrange [15:40]
+set xrange [0.8e-9:10e-1]
+set yrange [4:25]
 
 # Define los puntos de referencia (tics) sobre el eje x y el eje y
-# entre paréntesis se indican separados poMNIST 1-NNr coma la etiqueta de texto
+# entre paréntesis se indican separados por coma la etiqueta de texto
 # entre comillas dobles y la posición en ese eje donde aparece la
 # etiqueta
 
-set xtics ("1e-10" 1e-10, "1e-9" 1e-9, "1e-8" 1e-8, "1e-7" 1e-7, "1e-6" 1e-6, "1e-5" 1e-5, "1e-4" 1e-4, "1e-3" 1e-3, "1e-2" 1e-2, "1e-1" 1e-1)
-set ytics ("15" 15, "20" 20, "25" 25, "30" 30, "35" 35, "40" 40)
+set xtics ("1e-9" 1e-9, "1e-8" 1e-8, "1e-7" 1e-7, "1e-6" 1e-6, "1e-5" 1e-5, "1e-4" 1e-4, "1e-3" 1e-3, "1e-2" 1e-2, "1e-1" 1e-1, "9e-1" 9e-1)
+set ytics ("5" 5, "10" 10, "15" 15)
 
 # Definimos el texto que usamos para poner etiquetas en la gráfica:
 # - El eje x "Dimensionalidad"
@@ -52,9 +52,10 @@ set ytics ("15" 15, "20" 20, "25" 25, "30" 30, "35" 35, "40" 40)
 # se alinea el texto (right, left, center) e incluso el tipo y tamaño
 # de la fuente: font "HelveticaBold,30"
 
-set label "Epsilon" at 1e-1,16 right
-set label "Error (%)" at 1e-11,38 left
-set label "MNIST Multinomial" at 1e-5,30 center font "HelveticaBold,30"
+set label "Alpha" at 5e-1,4.5 right
+set label "Error (%)" at 1e-9,23 left
+# set label "Original" at 0.92,2.9 left
+set label "MNIST Gaussian" at 1e-3,17 center font "HelveticaBold,30"
 
 # El comando plot representa las dos curvas que aparecen en la
 # gráfica. La primera curva es la de PCA y la segunda, la Original,
@@ -84,7 +85,7 @@ set label "MNIST Multinomial" at 1e-5,30 center font "HelveticaBold,30"
 # (not) para esta curva, el tipo de curva es una línea "with line" (w
 # l) cuyo linewidth es 4 (lw 4) y el tipo de línea es la 2 (lt 2)
 
-plot "multinomial-exp.out" u 1:2 t "" w lp lw 2 lt 1 ps 2.0
+plot "gaussian-exp.out" u 1:2 not w lp lw 2 lt 1
 
 # Si quieres saber más sobre los anchos de línea, tipos de
 # línea/punto, etc. ejecuta "gnuplot" desde el interprete de comandos,
